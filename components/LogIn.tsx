@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { users } from "@/data/user";
+import { users } from "@/data/users";
 import { useUserContext } from "@/contexts/UserContext";
 
 
@@ -28,34 +28,36 @@ export default function LogIn() {
 };
 
 return(
-    <form onSubmit={handleLogIn} className="flex flex-col gap-3 max-w-xs">
-        <h2 className="text-xl font-bold">Welcome to Recipe Finder</h2>
+    <form 
+    onSubmit={handleLogIn} 
+    className="pixel-box flex w-full flex-col gap-4 bg-neight p-6">
+        <h2 className="font-heading text-xs leading-relaxed text-neon-cyon">INSER COIN TO ENTER</h2>
 
-        <label className="flex flex-col">
+        <label className="flex flex-col gap-1">
             Username
             <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="border roundeed px-2 py-1"
+            className="border-4 border-black bg-cream px-2 py-1 text-night outline-none focus:border-neon-cyan"
             />
         </label>
 
-        <label className="flex flex-col">
+        <label className="flex flex-col gap-1">
             Password
             <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border roundeed px-2 py-1"
-             />
+            className="border-4 border-black bg-cream px-2 py-1 text-night outline-none focus:border-neon-cyan"
+            />
         </label>
 
         {/* only show when its error */}
-        {error && <p className="text-red-600">{error}</p>}
+        {error && <p className="text-neon-yellow">{error}</p>}
 
-        <button type="submit" className="border rounded px-2 py-1">
-            Log in
+        <button type="submit" className="pixel-button bg-neon-yellow text-night">
+            START
         </button>      
     </form>
 )

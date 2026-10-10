@@ -1,61 +1,61 @@
 "use client";
 
-
 import Link from "next/link";
-import{ useUserContext } from "@/contexts/UserContext";
-import RecipeCard from "@/components/RecipeCard";
+import { useUserContext } from "@/contexts/UserContext";
+import DrinkCard from "@/components/DrinkCard";
+
+export default function ProfilePage() {
+  const { user, setUser } = useUserContext();
+
+  if (!user) return null;
 
 
-export default function ProfilePage(){
+  const handleRemove = (idDrink: string) => {
+    setUser({
+      ...user,
+      savedDrinks: user.savedDrinks.filter((drink) => drink.idDrink !== idDrink),
+    });
+  };
 
-    const { user, setUser } = useUserContext()
-    
-    if(!user)return null;
+  return (
+    <section className="flex flex-col gap-8">
+      <div className="pixel-box flex flex-col gap-2 bg-cream p-6 text-night">
+        <h2 className="font-heading text-lg">PLAYER PROFILE</h2>
+        <p className="text-2xl">Username: {user.username}</p>
+        <p className="text-2xl">
+          Favourite category: {user.favouriteCategory ?? "Not chosen yet"}
+        </p>
+      </div>
 
-    const handleRemove = (idMeal: string) => {
-        setUser({
-            ...user,
-            savedRecipes: user.savedRecipes.filter(
-                (recipe) => recipe.idMeal !== idMeal
-            )
-        })
-    }
-    return (
-        <section className="p-4 flex flex-col gap-6">
-            <div>
-                <h2 className="text-2xl font-bold">My profile</h2>
-                <p>Favourite category: {user.favouriteCategory ?? "Not chosen yet"}</p>
-            </div>
+      <div className="flex flex-col gap-6">
+        <h3 className="font-heading text-sm text-neon-yellow">
+          SAVED DRINKS ({user.savedDrinks.length})
+        </h3>
 
-            <div>
-                <h3 className="text-xl font-bold mb-4">
-                    Saved recipes({ user.savedRecipes.length})
-                </h3>
-
-                {user.savedRecipes.length ===0 ? (
-                    <p>
-                        You have no saved recipes yet.{""}
-                        <Link href="/categories" className="underline">
-                        Find some recipes
-                        </Link>
-                    </p>
-                ) :(
-                    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                        {user.savedRecipes.map((recipe) => (
-                            <li key={recipe.idMeal} className="flex flex-col gap-2">
-                                <RecipeCard recipe={recipe} />
-                                <button
-                                onClick={() => handleRemove(recipe.idMeal)}
-                                className="border rounded px-2 py-1"
-                                >
-                                    Remove
-                                </button>
-                            </li>
-                        ))}
-
-                    </ul>
-                )}
-            </div>
-        </section>
-    )
+        {user.savedDrinks.length === 0 ? (
+          <p className="text-2xl">
+            No saved drinks yet.{" "}
+            <Link href="/categories" className="text-neon-cyan underline">
+              Find some drinks
+            </Link>
+          </p>
+        ) : (
+          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {user.savedDrinks.map((drink) => (
+              <li key={drink.idDrink} className="flex flex-col gap-3">
+                <DrinkCard drink={drink} />
+                <button
+                  onClick={() => handleRemove(drink.idDrink)}
+                  className="pixel-button bg-neon-pink text-night"
+                >
+                  REMOVE
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  );
 }
+

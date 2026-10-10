@@ -4,19 +4,19 @@ export const users: UserType[] = [
   {
     username: "anna",
     password: "anna123",
-    favouriteCategory: "Dessert",
-    savedRecipes: [],
+    favouriteCategory: "Cocktail",
+    savedDrinks: [],
   },
   {
     username: "erik",
     password: "erik123",
-    favouriteCategory: "Seafood",
-    savedRecipes: [],
+    favouriteCategory: "Shot",
+    savedDrinks: [],
   },
   {
     username: "sara",
     password: "sara123",
     favouriteCategory: null,
-    savedRecipes: [],
+    savedDrinks: [],
   },
 ];

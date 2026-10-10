@@ -2,44 +2,43 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-
-import RecipeCard from "@/components/RecipeCard";
-import { getRecipesByCategory } from "@/lib/api";
-import { RecipeSummary } from "@/types/recipe";
+import DrinkCard from "@/components/DrinkCard";
+import { getDrinksByCategory } from "@/lib/api";
+import { DrinkSummary } from "@/types/drink";
+import FeaturedDrink from "@/components/FeaturedDrink";
+import BackButton from "@/components/BackButton"
 
 export default function CategoryPage() {
-  const { category } = useParams<{ category: string }>();
-  const [recipes, setRecipes] = useState<RecipeSummary[]>([]);
+  const params = useParams<{ category: string }>();
+
+  const category = decodeURIComponent(params.category);
+  const [drinks, setDrinks] = useState<DrinkSummary[]>([]);
 
   useEffect(() => {
-    const loadRecipes = async () => {
-        const result = await getRecipesByCategory(category)
-        setRecipes(result)
-    }
-    loadRecipes()
-  },[category])
+    const loadDrinks = async () => {
+      const result = await getDrinksByCategory(category);
+      setDrinks(result);
+    };
+    loadDrinks();
+  }, [category]);
 
+  return (
+    <section className="flex flex-col gap-6">
+      <BackButton label ="Back to categories" />
 
-  return(
-    <section className="p-4">
-        <Link href="/categories" className="underline">
-        ← Back to categories
-        </Link>
+      <h2 className="font-heading text-xl leading-relaxed text-neon-yellow">
+        {category.toUpperCase()}
+      </h2>
 
-        <h2 className="text-2xl font-bold my-4">{category}</h2>
+      {drinks.length === 0 && <p>Loading drinks...</p>}
 
-        {recipes.length === 0 && <p>Loading recipes...</p>}
-
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {recipes.map((recipe) => (
-                <li key={recipe.idMeal}>
-                    <RecipeCard recipe={recipe} />
-                </li>
-            ))}
-
-        </ul>
-
+      <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {drinks.map((drink) => (
+          <li key={drink.idDrink}>
+            <DrinkCard drink={drink} />
+          </li>
+        ))}
+      </ul>
     </section>
-  )
+  );
 }

@@ -1,39 +1,40 @@
-import { RecipeDetail, RecipeSummary } from "@/types/recipe";
+import { DrinkDetail, DrinkSummary } from "@/types/drink";
 import { CategoryType } from "@/types/category";
 
-const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
+const BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1";
 
-export async function getRandomRecipe(): Promise<RecipeSummary> {
+export async function getRandomDrink(): Promise<DrinkSummary> {
   const res = await fetch(`${BASE_URL}/random.php`);
   const data = await res.json();
-  return data.meals[0];
+  return data.drinks[0];
 }
 
-export async function getRecipeFromCategory(
+export async function getDrinksByCategory(
   category: string,
-): Promise<RecipeSummary> {
-  const res = await fetch(`${BASE_URL}/filter.php?c=${category}`);
+): Promise<DrinkSummary[]> {
+  const res = await fetch(
+    `${BASE_URL}/filter.php?c=${encodeURIComponent(category)}`,
+  );
   const data = await res.json();
-  const randomIndex = Math.floor(Math.random() * data.meals.length);
-  return data.meals[randomIndex];
+  return data.drinks ?? [];
+}
+
+export async function getDrinkFromCategory(
+  category: string,
+): Promise<DrinkSummary> {
+  const drinks = await getDrinksByCategory(category);
+  const randomIndex = Math.floor(Math.random() * drinks.length);
+  return drinks[randomIndex];
 }
 
 export async function getCategories(): Promise<CategoryType[]> {
-  const res = await fetch(`${BASE_URL}/categories.php`);
+  const res = await fetch(`${BASE_URL}/list.php?c=list`);
   const data = await res.json();
-  return data.categories;
+  return data.drinks;
 }
 
-export async function getRecipesByCategory(
-  category: string,
-): Promise<RecipeSummary[]> {
-  const res = await fetch(`${BASE_URL}/filter.php?c=${category}`);
-  const data = await res.json();
-  return data.meals;
-}
-
-export async function getRecipeById(id: string): Promise<RecipeDetail> {
+export async function getDrinkById(id: string): Promise<DrinkDetail> {
   const res = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
   const data = await res.json();
-  return data.meals[0];
+  return data.drinks[0];
 }

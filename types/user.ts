@@ -1,8 +1,8 @@
-import { RecipeSummary } from "./recipe";
+import { DrinkSummary } from "./drink";
 
 export type UserType = {
   username: string;
   password: string;
   favouriteCategory: string | null;
-  savedRecipes: RecipeSummary[];
+  savedDrinks: DrinkSummary[];
 };

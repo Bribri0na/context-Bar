@@ -1,12 +1,13 @@
 "use client";
 
-import { useUserContext } from "@/contexts/UserContext";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUserContext } from "@/contexts/UserContext";
 import { getCategories } from "@/lib/api";
 import { CategoryType } from "@/types/category";
+import { categoryIcons } from "@/data/categoryIcons";
 
-export default function Home() {
+export default function CategoriesPage() {
   const { user, setUser } = useUserContext();
   const [categories, setCategories] = useState<CategoryType[]>([]);
 
@@ -24,34 +25,36 @@ export default function Home() {
   };
 
   return (
-    <section className="p-4">
-      <h2 className="text-2xl font-bold">Hi {user?.username}</h2>
+    <section className="flex flex-col gap-6">
+      <h2 className="font-heading text-xl text-neon-yellow">CATEGORIES</h2>
 
       {categories.length === 0 && <p>Loading categories...</p>}
 
-      <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category) => {
-          const isFavourite = user?.favouriteCategory === category.strCategory;
+          const name = category.strCategory;
+          const isFavourite = user?.favouriteCategory === name;
 
           return (
             <li
-              key={category.idCategory}
-              className="border rounded p-3 flex flex-col gap-2"
+              key={name}
+              className="pixel-box flex flex-col gap-4 bg-cream p-4 text-night"
             >
-              <Link href={`/categories/${category.strCategory}`}>
-                <img
-                  src={category.strCategoryThumb}
-                  alt={category.strCategory}
-                  className="w-full"
-                />
-                <h3 className="font-bold">{category.strCategory}</h3>
+              <Link
+                href={`/categories/${encodeURIComponent(name)}`}
+                className="flex items-center gap-3 text-2xl hover:text-neon-pink"
+              >
+                <span className="text-4xl">{categoryIcons[name] ?? "🍸"}</span>
+                {name}              
               </Link>
 
               <button
-                onClick={() => handleFavourite(category.strCategory)}
-                className="border rounded px-2 py-1"
+                onClick={() => handleFavourite(name)}
+                className={`pixel-button text-night ${
+                  isFavourite ? "bg-neon-yellow" : "bg-cream"
+                }`}
               >
-                {isFavourite ? "* Favourite" : "☆ Set as favourite"}
+                {isFavourite ? "★ Favourite" : "☆ Set as favourite"}
               </button>
             </li>
           );

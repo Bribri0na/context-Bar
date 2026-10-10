@@ -1,37 +1,65 @@
-# FG - Webb application development - Assignment - Context - Dynamic Routes
+# Bri Bar 🍸
 
-This is a school assignment where I built a multipage recipe website using React Context and dynamic routing.
+A pixel style cocktail bar website built with Next.js, TypeScript and Tailwind CSS.
+It uses React Context to keep track of the logged-in user and dynamic routes
+to show drink categories and drinks from [TheCocktailDB API](https://www.thecocktaildb.com/api.php).
 
-Users can log in, browse meal categories and recipes, pick a favourite category and save or remove recipes. The Home page shows a recipe from the user's favourite category, and the Profile page lists all saved recipes. Users can log out, and another user can log in during the same session.
+## Live Demo
 
-## Tech Stack
+https://context-bar.vercel.app/
 
-- TypeScript
-- React
-- Next.js (App Router)
-- Tailwind CSS
+## How to log in
 
-## Used API
-
-- [TheMealDB](https://www.themealdb.com/api.php)
-
-## Users
-
-The users are hardcoded in `data/users.ts`.
+Users are hardcoded in `data/users.ts`. Log in with one of these:
 
 | Username | Password | Favourite category |
 | -------- | -------- | ------------------ |
-| anna     | anna123  | Dessert            |
-| erik     | erik123  | Seafood            |
-| sara     | sara123  | –                  |
+| anna     | anna123  | Cocktail           |
+| erik     | erik123  | Shot               |
+| sara     | sara123  | – (random drink)   |
 
-Each user sees a different recipe on the Home page. Sara has no favourite category, so she gets a random recipe.
+Each user sees a different drink on the Home page based on their favourite category.
+Sara has no favourite category yet, so she gets a random drink.
 
-Note: user data is only stored in Context, so refreshing the page logs the user out.
+## Features
 
-## Run Locally
+- **Log in / log out** – a new user can log in during the same session
+- **Home page** – not logged in: log in form + a random drink from the API. Logged in: a welcome message and a drink from the user's favourite category
+- **Categories page** – all categories from the API. Users can set a favourite category, which is saved in Context and used on the Home page
+- **Category page** (`/categories/[category]`) – dynamic route showing all drinks in a category
+- **Drink page** (`/drink/[id]`) – dynamic route showing ingredients and instructions. Users can save / unsave the drink
+- **Profile page** – lists saved drinks. Clicking a drink opens the Drink page, and drinks can be removed
+- **Responsive** – mobile menu that slides in from the side
+
+## Context
+
+`contexts/UserContext.tsx` holds the logged-in user and a `setUser` function.
+`UserProvider` wraps the whole app in `app/layout.tsx`, and components read or
+update the user with the `useUserContext` hook.
+
+The context is used in `LogInWrapper`, `LogIn`, `Header`, and the Home, Categories, Drink and Profile pages.
+
+The user is also saved in localStorage, so they stay logged in after a page refresh
+until they log out. This is only for this assignment – a real app would use proper authentication.
+
+## Project structure
+
+```
+app/          pages and dynamic routes
+components/   reusable components
+contexts/     UserContext
+data/         hardcoded users and category icons
+lib/          API calls and helper functions
+types/        TypeScript types
+```
+
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
+
+## Tech
+
+Next.js · TypeScript · Tailwind CSS · TheCocktailDB API
